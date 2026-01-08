@@ -1,0 +1,2223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CORE-AI Chat Futuristic</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #0a0a0f;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Container dengan rasio 19.5:9 */
+  .mobile-container {
+    width: 400px;
+    height: calc(400px * 19.5 / 9);
+    max-width: 100vw;
+    margin: 0 auto;
+    background: #0f0f14;
+    display: flex;
+    flex-direction: column;
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 0 40px rgba(59, 91, 219, 0.6);
+    color: #eee;
+    position: relative;
+  }
+
+  /* ==================== HEADER ==================== */
+  .header {
+    background: #fff;
+    color: #222;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    position: relative;
+    z-index: 10;
+  }
+  
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .menu-btn {
+    background: #f5f5f7;
+    border: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  
+  .menu-btn:hover {
+    background: #ebebed;
+  }
+  
+  .menu-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: #1a1a1a;
+  }
+  
+  .logo-header {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    border-radius: 10px;
+  }
+  
+  .header-brand {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header-title {
+    font-weight: 700;
+    font-size: 15px;
+    color: #1a1a1a;
+    letter-spacing: 0.5px;
+  }
+  
+  .header-subtitle {
+    font-size: 10px;
+    color: #6b6b6b;
+  }
+  
+  .header-badge {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-radius: 20px;
+    padding: 6px 12px;
+    font-size: 10px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .badge-dot {
+    width: 6px;
+    height: 6px;
+    background: #4caf50;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+
+  /* ==================== SIDEBAR ==================== */
+  .sidebar {
+    background: #ffffff;
+    width: 280px;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 25;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+    color: #222;
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .sidebar-overlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    z-index: 20;
+    display: none;
+    backdrop-filter: blur(4px);
+  }
+  
+  .sidebar-overlay.show {
+    display: block;
+  }
+  
+  .sidebar-header {
+    padding: 16px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .logo-sidebar {
+    width: 44px;
+    height: 44px;
+    object-fit: contain;
+    border-radius: 12px;
+  }
+  
+  .sidebar-brand {
+    flex: 1;
+  }
+  
+  .sidebar-brand-title {
+    font-weight: 700;
+    font-size: 16px;
+    color: #1a1a1a;
+  }
+  
+  .sidebar-brand-subtitle {
+    font-size: 10px;
+    color: #6b6b6b;
+  }
+  
+  .sidebar-close {
+    background: #f5f5f7;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .sidebar-close svg {
+    width: 18px;
+    height: 18px;
+    stroke: #6b6b6b;
+  }
+  
+  .sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+  }
+  
+  .sidebar-section-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: #9e9e9e;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 0;
+    margin-bottom: 8px;
+  }
+  
+  .new-chat-btn {
+    width: 100%;
+    background: #1a1a1a;
+    color: #fff;
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    transition: all 0.2s;
+  }
+  
+  .new-chat-btn:hover {
+    background: #333;
+  }
+  
+  .new-chat-btn svg {
+    width: 18px;
+    height: 18px;
+    stroke: #fff;
+  }
+  
+  .nav-btn {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 12px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border-radius: 12px;
+    transition: all 0.2s;
+    margin-bottom: 4px;
+  }
+  
+  .nav-btn:hover {
+    background: #f5f5f7;
+  }
+  
+  .nav-btn.active {
+    background: #f0f4ff;
+  }
+  
+  .nav-btn.active .nav-icon {
+    stroke: #3b5bdb;
+  }
+  
+  .nav-btn.active .nav-text {
+    color: #3b5bdb;
+    font-weight: 600;
+  }
+  
+  .nav-icon {
+    width: 20px;
+    height: 20px;
+    stroke: #6b6b6b;
+    flex-shrink: 0;
+  }
+  
+  .nav-info {
+    flex: 1;
+  }
+  
+  .nav-text {
+    font-size: 13px;
+    color: #1a1a1a;
+    font-weight: 500;
+  }
+  
+  .nav-desc {
+    font-size: 10px;
+    color: #9e9e9e;
+    margin-top: 2px;
+  }
+  
+  .chat-history-item {
+    padding: 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 6px;
+  }
+  
+  .chat-history-item:hover {
+    background: #f5f5f7;
+  }
+  
+  .chat-history-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+  }
+  
+  .chat-history-preview {
+    font-size: 11px;
+    color: #9e9e9e;
+  }
+  
+  .chat-history-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+  }
+  
+  .chat-history-date {
+    font-size: 10px;
+    color: #bdbdbd;
+  }
+  
+  .chat-history-badge {
+    font-size: 9px;
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+  
+  .sidebar-footer {
+    padding: 16px;
+    border-top: 1px solid #f0f0f0;
+  }
+  
+  .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .user-profile:hover {
+    background: #f5f5f7;
+  }
+  
+  .user-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  
+  .user-info {
+    flex: 1;
+  }
+  
+  .user-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  
+  .user-role {
+    font-size: 10px;
+    color: #9e9e9e;
+  }
+
+  /* ==================== MAIN CONTENT ==================== */
+  .main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #0f0f14;
+  }
+  
+  .content-area {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 120px;
+  }
+
+  /* ==================== CHAT VIEW ==================== */
+  .chat-container {
+    padding: 20px 16px;
+  }
+  
+  .empty-state {
+    text-align: center;
+    padding: 40px 16px;
+  }
+  
+  .empty-icon {
+    width: 80px;
+    height: 80px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+  
+  .empty-icon svg {
+    width: 36px;
+    height: 36px;
+    stroke: rgba(255,255,255,0.4);
+  }
+  
+  .empty-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 8px;
+  }
+  
+  .empty-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.6;
+    margin-bottom: 28px;
+    max-width: 280px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .feature-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .feature-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 16px;
+    text-align: left;
+    transition: all 0.3s;
+  }
+  
+  .feature-card:hover {
+    background: rgba(255,255,255,0.05);
+    border-color: rgba(255,255,255,0.12);
+  }
+  
+  .feature-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  
+  .feature-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .feature-card-icon.blue { background: rgba(59, 130, 246, 0.15); }
+  .feature-card-icon.purple { background: rgba(139, 92, 246, 0.15); }
+  .feature-card-icon.amber { background: rgba(245, 158, 11, 0.15); }
+  .feature-card-icon.cyan { background: rgba(6, 182, 212, 0.15); }
+  
+  .feature-card-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .feature-card-icon.blue svg { stroke: #3b82f6; }
+  .feature-card-icon.purple svg { stroke: #8b5cf6; }
+  .feature-card-icon.amber svg { stroke: #f59e0b; }
+  .feature-card-icon.cyan svg { stroke: #06b6d4; }
+  
+  .feature-card-info {
+    flex: 1;
+  }
+  
+  .feature-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+  }
+  
+  .feature-card-subtitle {
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 2px;
+  }
+  
+  .feature-card-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+  }
+
+  /* Chat Messages */
+  .message {
+    margin-bottom: 16px;
+  }
+  
+  .message-user {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .message-user .bubble {
+    background: linear-gradient(135deg, #3b5bdb 0%, #5c7cfa 100%);
+    color: #fff;
+    border-radius: 20px 20px 4px 20px;
+    padding: 14px 18px;
+    max-width: 85%;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+  
+  .message-ai {
+    display: flex;
+    justify-content: flex-start;
+  }
+  
+  .message-ai .bubble {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #ffffff;
+    border-radius: 20px 20px 20px 4px;
+    padding: 16px 18px;
+    max-width: 92%;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  
+  .ai-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  .ai-avatar {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #3b5bdb 0%, #5c7cfa 100%);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .ai-avatar svg {
+    width: 18px;
+    height: 18px;
+    stroke: #fff;
+  }
+  
+  .ai-name {
+    font-weight: 600;
+    font-size: 13px;
+    color: #ffffff;
+  }
+  
+  .ai-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+  }
+  
+  .ai-warning {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .ai-warning-icon {
+    width: 20px;
+    height: 20px;
+    stroke: #f59e0b;
+    flex-shrink: 0;
+  }
+  
+  .ai-warning-content {
+    flex: 1;
+  }
+  
+  .ai-warning-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #f59e0b;
+  }
+  
+  .ai-warning-text {
+    font-size: 10px;
+    color: rgba(245, 158, 11, 0.8);
+    margin-top: 2px;
+  }
+  
+  .ai-section {
+    margin-bottom: 14px;
+  }
+  
+  .ai-section-title {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    border-radius: 8px;
+  }
+  
+  .ai-section-title.blue {
+    background: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
+  }
+  
+  .ai-section-title.purple {
+    background: rgba(139, 92, 246, 0.1);
+    color: #a78bfa;
+  }
+  
+  .ai-section-title.red {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
+  }
+  
+  .ai-section-title svg {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .ai-list {
+    list-style: none;
+    padding-left: 10px;
+  }
+  
+  .ai-list li {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+    padding: 6px 0;
+    padding-left: 16px;
+    position: relative;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  
+  .ai-list li:last-child {
+    border-bottom: none;
+  }
+  
+  .ai-list li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 4px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+  }
+  
+  .ai-risk-box {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    border-radius: 10px;
+    padding: 12px;
+  }
+  
+  .ai-risk-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  
+  .ai-risk-header svg {
+    width: 14px;
+    height: 14px;
+    stroke: #f87171;
+  }
+  
+  .ai-risk-title {
+    font-size: 11px;
+    font-weight: 600;
+    color: #f87171;
+  }
+  
+  .ai-risk-text {
+    font-size: 11px;
+    color: rgba(248, 113, 113, 0.8);
+    line-height: 1.5;
+  }
+  
+  .ai-tip {
+    margin-top: 14px;
+    padding: 12px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 10px;
+    font-size: 11px;
+    color: #34d399;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .ai-tip svg {
+    width: 16px;
+    height: 16px;
+    stroke: #34d399;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  
+  .ai-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  
+  .ai-action-btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .ai-action-btn:hover {
+    background: rgba(255,255,255,0.08);
+  }
+  
+  .ai-action-btn.primary {
+    background: linear-gradient(135deg, #3b5bdb 0%, #5c7cfa 100%);
+    color: #fff;
+    border: none;
+  }
+
+  /* ==================== INPUT BAR ==================== */
+  .input-bar {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #0f0f14;
+    padding: 16px;
+    z-index: 10;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  
+  .input-actions {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .input-action-btn {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 8px 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.2s;
+  }
+  
+  .input-action-btn:hover {
+    background: rgba(255,255,255,0.1);
+  }
+  
+  .input-action-btn svg {
+    width: 16px;
+    height: 16px;
+    stroke: rgba(255,255,255,0.6);
+  }
+  
+  .input-action-btn span {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 500;
+  }
+  
+  .input-wrapper {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 10px 10px 10px 18px;
+    transition: all 0.2s;
+  }
+  
+  .input-wrapper:focus-within {
+    border-color: rgba(59, 91, 219, 0.5);
+    background: rgba(255,255,255,0.08);
+  }
+  
+  .input-bar input {
+    flex: 1;
+    border: none;
+    background: none;
+    font-size: 14px;
+    outline: none;
+    color: #ffffff;
+  }
+  
+  .input-bar input::placeholder {
+    color: rgba(255,255,255,0.3);
+  }
+  
+  .send-btn {
+    background: linear-gradient(135deg, #3b5bdb 0%, #5c7cfa 100%);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    width: 42px;
+    height: 42px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  
+  .send-btn:hover {
+    transform: scale(1.05);
+  }
+  
+  .send-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .send-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: #fff;
+  }
+
+  /* ==================== CID MODAL ==================== */
+  .modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 100;
+    display: none;
+    align-items: flex-end;
+    justify-content: center;
+    backdrop-filter: blur(8px);
+  }
+  
+  .modal-overlay.show {
+    display: flex;
+  }
+  
+  .modal {
+    background: #1a1a1f;
+    border-radius: 24px 24px 0 0;
+    width: 100%;
+    max-height: 90%;
+    overflow-y: auto;
+    animation: slideUp 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-bottom: none;
+  }
+  
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  
+  .modal-handle {
+    width: 40px;
+    height: 4px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 2px;
+    margin: 12px auto;
+  }
+  
+  .modal-header {
+    padding: 16px 20px 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  
+  .modal-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #3b5bdb 0%, #5c7cfa 100%);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .modal-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: #fff;
+  }
+  
+  .modal-header-content {
+    flex: 1;
+  }
+  
+  .modal-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+  
+  .modal-subtitle {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 4px;
+  }
+  
+  .modal-required {
+    font-size: 9px;
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-weight: 600;
+  }
+  
+  .modal-body {
+    padding: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 18px;
+  }
+  
+  .form-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 10px;
+  }
+  
+  .form-label-number {
+    width: 22px;
+    height: 22px;
+    background: rgba(59, 91, 219, 0.2);
+    color: #5c7cfa;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  
+  .form-label svg {
+    width: 16px;
+    height: 16px;
+    stroke: rgba(255,255,255,0.5);
+  }
+  
+  .form-textarea {
+    width: 100%;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 14px;
+    font-size: 13px;
+    font-family: inherit;
+    resize: none;
+    outline: none;
+    transition: all 0.2s;
+    background: rgba(255,255,255,0.03);
+    color: #ffffff;
+    line-height: 1.5;
+  }
+  
+  .form-textarea:focus {
+    border-color: rgba(59, 91, 219, 0.5);
+    background: rgba(255,255,255,0.05);
+  }
+  
+  .form-textarea::placeholder {
+    color: rgba(255,255,255,0.3);
+  }
+  
+  .form-tip {
+    background: rgba(59, 91, 219, 0.1);
+    border: 1px solid rgba(59, 91, 219, 0.2);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 20px;
+  }
+  
+  .form-tip-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  
+  .form-tip-header svg {
+    width: 16px;
+    height: 16px;
+    stroke: #5c7cfa;
+  }
+  
+  .form-tip-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: #5c7cfa;
+  }
+  
+  .form-tip-text {
+    font-size: 11px;
+    color: rgba(92, 124, 250, 0.8);
+    line-height: 1.5;
+  }
+  
+  .modal-actions {
+    display: flex;
+    gap: 12px;
+  }
+  
+  .btn {
+    flex: 1;
+    padding: 14px;
+    border-radius: 14px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
+  
+  .btn-secondary {
+    background: rgba(255,255,255,0.05);
+    color: rgba(255,255,255,0.7);
+    border: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  .btn-secondary:hover {
+    background: rgba(255,255,255,0.1);
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, #3b5bdb 0%, #5c7cfa 100%);
+    color: #fff;
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-1px);
+  }
+  
+  .btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* ==================== DASHBOARD VIEW ==================== */
+  .dashboard-container {
+    padding: 20px 16px;
+  }
+  
+  .view-header {
+    margin-bottom: 24px;
+  }
+  
+  .view-header-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  
+  .view-header-icon svg {
+    width: 22px;
+    height: 22px;
+    stroke: rgba(255,255,255,0.6);
+  }
+  
+  .view-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 6px;
+  }
+  
+  .view-subtitle {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.5;
+  }
+  
+  .ratio-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .ratio-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 18px;
+  }
+  
+  .ratio-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  
+  .ratio-card-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 4px;
+  }
+  
+  .ratio-card-value {
+    font-size: 32px;
+    font-weight: 800;
+    color: #ffffff;
+  }
+  
+  .ratio-card.human .ratio-card-value { color: #60a5fa; }
+  .ratio-card.ai .ratio-card-value { color: #a78bfa; }
+  
+  .ratio-card-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .ratio-card-icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .ratio-card.human .ratio-card-icon svg { stroke: #60a5fa; }
+  .ratio-card.ai .ratio-card-icon svg { stroke: #a78bfa; }
+  
+  .ratio-progress {
+    height: 8px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .ratio-progress-bar {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+  }
+  
+  .ratio-card.human .ratio-progress-bar { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+  .ratio-card.ai .ratio-progress-bar { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  
+  .stat-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+  }
+  
+  .stat-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+  }
+  
+  .stat-card-icon.green { background: rgba(16, 185, 129, 0.15); }
+  .stat-card-icon.orange { background: rgba(245, 158, 11, 0.15); }
+  .stat-card-icon.pink { background: rgba(236, 72, 153, 0.15); }
+  .stat-card-icon.blue { background: rgba(59, 130, 246, 0.15); }
+  
+  .stat-card-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .stat-card-icon.green svg { stroke: #34d399; }
+  .stat-card-icon.orange svg { stroke: #fbbf24; }
+  .stat-card-icon.pink svg { stroke: #f472b6; }
+  .stat-card-icon.blue svg { stroke: #60a5fa; }
+  
+  .stat-card-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: #ffffff;
+  }
+  
+  .stat-card-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 4px;
+  }
+  
+  .analysis-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 18px;
+  }
+  
+  .analysis-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .analysis-title svg {
+    width: 18px;
+    height: 18px;
+    stroke: rgba(255,255,255,0.5);
+  }
+  
+  .analysis-item {
+    margin-bottom: 14px;
+  }
+  
+  .analysis-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .analysis-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  
+  .analysis-item-label {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+  }
+  
+  .analysis-item-value {
+    font-size: 12px;
+    font-weight: 700;
+    color: #ffffff;
+  }
+  
+  .analysis-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  
+  .analysis-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+  
+  .analysis-bar-fill.blue { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+  .analysis-bar-fill.purple { background: linear-gradient(90deg, #8b5cf6, #a78bfa); }
+  .analysis-bar-fill.green { background: linear-gradient(90deg, #10b981, #34d399); }
+
+  /* ==================== PROMPT LIBRARY VIEW ==================== */
+  .library-container {
+    padding: 20px 16px;
+  }
+  
+  .library-search {
+    margin-bottom: 16px;
+  }
+  
+  .library-search-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 14px;
+    padding: 12px 14px;
+  }
+  
+  .library-search-wrapper:focus-within {
+    border-color: rgba(59, 91, 219, 0.5);
+  }
+  
+  .library-search-wrapper svg {
+    width: 18px;
+    height: 18px;
+    stroke: rgba(255,255,255,0.4);
+  }
+  
+  .library-search input {
+    flex: 1;
+    border: none;
+    background: none;
+    font-size: 13px;
+    outline: none;
+    color: #ffffff;
+  }
+  
+  .library-search input::placeholder {
+    color: rgba(255,255,255,0.3);
+  }
+  
+  .library-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .prompt-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .prompt-card:hover {
+    background: rgba(255,255,255,0.06);
+    border-color: rgba(255,255,255,0.15);
+  }
+  
+  .prompt-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  
+  .prompt-card-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .prompt-card-icon.indigo { background: rgba(99, 102, 241, 0.15); }
+  .prompt-card-icon.purple { background: rgba(139, 92, 246, 0.15); }
+  .prompt-card-icon.blue { background: rgba(59, 130, 246, 0.15); }
+  .prompt-card-icon.green { background: rgba(16, 185, 129, 0.15); }
+  
+  .prompt-card-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .prompt-card-icon.indigo svg { stroke: #818cf8; }
+  .prompt-card-icon.purple svg { stroke: #a78bfa; }
+  .prompt-card-icon.blue svg { stroke: #60a5fa; }
+  .prompt-card-icon.green svg { stroke: #34d399; }
+  
+  .prompt-card-info {
+    flex: 1;
+  }
+  
+  .prompt-card-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #ffffff;
+  }
+  
+  .prompt-card-desc {
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    margin-top: 2px;
+  }
+  
+  .prompt-card-content {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  
+  .prompt-card-action {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.03);
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .prompt-card-action:hover {
+    background: rgba(255,255,255,0.08);
+  }
+
+  /* Utility */
+  .hidden {
+    display: none !important;
+  }
+  
+  @media (max-width: 400px) {
+    .mobile-container {
+      width: 100vw;
+      border-radius: 0;
+    }
+    .sidebar {
+      width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+  <div class="mobile-container">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="header-left">
+        <button class="menu-btn" onclick="openSidebar()">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+        <img src="logocore.png" alt="Logo" class="logo-header" />
+        <div class="header-brand">
+          <div class="header-title">CORE-AI</div>
+          <div class="header-subtitle">Cognitive Reflective Learning</div>
+        </div>
+      </div>
+      <div class="header-badge">
+        <span class="badge-dot"></span>
+        CID Active
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img src="logocore.png" alt="Logo" class="logo-sidebar" />
+        <div class="sidebar-brand">
+          <div class="sidebar-brand-title">CORE-AI</div>
+          <div class="sidebar-brand-subtitle">Reflective Learning Platform</div>
+        </div>
+        <button class="sidebar-close" onclick="closeSidebar()">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <div class="sidebar-content">
+        <button class="new-chat-btn" onclick="newChat()">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          New Conversation
+        </button>
+        
+        <div class="sidebar-section-title">Core Features</div>
+        
+        <button class="nav-btn active" id="nav-chat" onclick="showView('chat')">
+          <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
+          </svg>
+          <div class="nav-info">
+            <div class="nav-text">Reflective Chat</div>
+            <div class="nav-desc">CID + Reflective Gate</div>
+          </div>
+        </button>
+        
+        <button class="nav-btn" id="nav-dashboard" onclick="showView('dashboard')">
+          <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+          </svg>
+          <div class="nav-info">
+            <div class="nav-text">Decision Ratio</div>
+            <div class="nav-desc">Human vs AI contribution</div>
+          </div>
+        </button>
+        
+        <button class="nav-btn" id="nav-library" onclick="showView('library')">
+          <svg class="nav-icon" fill="none" viewBox="0 0 24 24" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+          </svg>
+          <div class="nav-info">
+            <div class="nav-text">Prompt Library</div>
+            <div class="nav-desc">Metacognitive scaffolding</div>
+          </div>
+        </button>
+        
+        <div class="sidebar-section-title">Chat History</div>
+        
+        <div class="chat-history-item">
+          <div class="chat-history-title">Data Structure Analysis</div>
+          <div class="chat-history-preview">Algorithm complexity discussion...</div>
+          <div class="chat-history-meta">
+            <span class="chat-history-date">Today</span>
+            <span class="chat-history-badge">65% Independent</span>
+          </div>
+        </div>
+        
+        <div class="chat-history-item">
+          <div class="chat-history-title">Machine Learning Basics</div>
+          <div class="chat-history-preview">Supervised learning discussion...</div>
+          <div class="chat-history-meta">
+            <span class="chat-history-date">Yesterday</span>
+            <span class="chat-history-badge">72% Independent</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="sidebar-footer">
+        <div class="user-profile">
+          <div class="user-avatar">AS</div>
+          <div class="user-info">
+            <div class="user-name">Ahmad Santoso</div>
+            <div class="user-role">Student • Semester 5</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <div class="content-area">
+        
+        <!-- CHAT VIEW -->
+        <div id="view-chat" class="view-content">
+          <div class="chat-container" id="chatContainer">
+            <div class="empty-state" id="emptyState">
+              <div class="empty-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
+                </svg>
+              </div>
+              <div class="empty-title">Start Reflective Conversation</div>
+              <div class="empty-desc">
+                This platform positions you as the primary cognitive agent. AI assists your thinking, not thinks for you.
+              </div>
+              
+              <div class="feature-cards">
+                <div class="feature-card">
+                  <div class="feature-card-header">
+                    <div class="feature-card-icon blue">
+                      <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                    </div>
+                    <div class="feature-card-info">
+                      <div class="feature-card-title">Cognitive Intention Declaration</div>
+                      <div class="feature-card-subtitle">Required before AI responds</div>
+                    </div>
+                  </div>
+                  <div class="feature-card-desc">
+                    Declare your thinking goals, hypotheses, and assumptions before AI activates.
+                  </div>
+                </div>
+                
+                <div class="feature-card">
+                  <div class="feature-card-header">
+                    <div class="feature-card-icon purple">
+                      <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+                      </svg>
+                    </div>
+                    <div class="feature-card-info">
+                      <div class="feature-card-title">Reflective AI Response Gate</div>
+                      <div class="feature-card-subtitle">No direct answers</div>
+                    </div>
+                  </div>
+                  <div class="feature-card-desc">
+                    AI provides alternatives, critical questions, and potential biases—not final solutions.
+                  </div>
+                </div>
+                
+                <div class="feature-card">
+                  <div class="feature-card-header">
+                    <div class="feature-card-icon amber">
+                      <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                      </svg>
+                    </div>
+                    <div class="feature-card-info">
+                      <div class="feature-card-title">AI Bias & Risk Notifier</div>
+                      <div class="feature-card-subtitle">Epistemic awareness</div>
+                    </div>
+                  </div>
+                  <div class="feature-card-desc">
+                    Real-time alerts about potential biases, uncertainties, and AI limitations.
+                  </div>
+                </div>
+                
+                <div class="feature-card">
+                  <div class="feature-card-header">
+                    <div class="feature-card-icon cyan">
+                      <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                      </svg>
+                    </div>
+                    <div class="feature-card-info">
+                      <div class="feature-card-title">Decision Ratio Dashboard</div>
+                      <div class="feature-card-subtitle">Visualize agency</div>
+                    </div>
+                  </div>
+                  <div class="feature-card-desc">
+                    Track and visualize your contribution vs AI suggestions in decision-making.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- DASHBOARD VIEW -->
+        <div id="view-dashboard" class="view-content hidden">
+          <div class="dashboard-container">
+            <div class="view-header">
+              <div class="view-header-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+                </svg>
+              </div>
+              <div class="view-title">Human-AI Decision Ratio</div>
+              <div class="view-subtitle">
+                Visualize the proportion of your thinking contribution vs AI suggestions
+              </div>
+            </div>
+            
+            <div class="ratio-cards">
+              <div class="ratio-card human">
+                <div class="ratio-card-header">
+                  <div>
+                    <div class="ratio-card-label">Your Contribution</div>
+                    <div class="ratio-card-value">65%</div>
+                  </div>
+                  <div class="ratio-card-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="ratio-progress">
+                  <div class="ratio-progress-bar" style="width: 65%"></div>
+                </div>
+              </div>
+              
+              <div class="ratio-card ai">
+                <div class="ratio-card-header">
+                  <div>
+                    <div class="ratio-card-label">AI Contribution</div>
+                    <div class="ratio-card-value">35%</div>
+                  </div>
+                  <div class="ratio-card-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                    </svg>
+                  </div>
+                </div>
+                <div class="ratio-progress">
+                  <div class="ratio-progress-bar" style="width: 35%"></div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-card-icon green">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+                  </svg>
+                </div>
+                <div class="stat-card-value">78%</div>
+                <div class="stat-card-label">Reflection Depth</div>
+              </div>
+              
+              <div class="stat-card">
+                <div class="stat-card-icon orange">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div class="stat-card-value">82%</div>
+                <div class="stat-card-label">Independent Decisions</div>
+              </div>
+              
+              <div class="stat-card">
+                <div class="stat-card-icon pink">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                  </svg>
+                </div>
+                <div class="stat-card-value">24</div>
+                <div class="stat-card-label">Total Reflections</div>
+              </div>
+              
+              <div class="stat-card">
+                <div class="stat-card-icon blue">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <div class="stat-card-value">18</div>
+                <div class="stat-card-label">CID Submitted</div>
+              </div>
+            </div>
+            
+            <div class="analysis-card">
+              <div class="analysis-title">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+                </svg>
+                Weekly Interaction Analysis
+              </div>
+              
+              <div class="analysis-item">
+                <div class="analysis-item-header">
+                  <span class="analysis-item-label">Independent Ideas</span>
+                  <span class="analysis-item-value">70%</span>
+                </div>
+                <div class="analysis-bar">
+                  <div class="analysis-bar-fill blue" style="width: 70%"></div>
+                </div>
+              </div>
+              
+              <div class="analysis-item">
+                <div class="analysis-item-header">
+                  <span class="analysis-item-label">Revised After AI</span>
+                  <span class="analysis-item-value">55%</span>
+                </div>
+                <div class="analysis-bar">
+                  <div class="analysis-bar-fill purple" style="width: 55%"></div>
+                </div>
+              </div>
+              
+              <div class="analysis-item">
+                <div class="analysis-item-header">
+                  <span class="analysis-item-label">Rejected AI Suggestions</span>
+                  <span class="analysis-item-value">25%</span>
+                </div>
+                <div class="analysis-bar">
+                  <div class="analysis-bar-fill green" style="width: 25%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- PROMPT LIBRARY VIEW -->
+        <div id="view-library" class="view-content hidden">
+          <div class="library-container">
+            <div class="view-header">
+              <div class="view-header-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                </svg>
+              </div>
+              <div class="view-title">Metacognitive Prompt Library</div>
+              <div class="view-subtitle">
+                Scaffolding for developing self-regulation and critical thinking
+              </div>
+            </div>
+            
+            <div class="library-search">
+              <div class="library-search-wrapper">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                </svg>
+                <input type="text" placeholder="Search prompts...">
+              </div>
+            </div>
+            
+            <div class="library-grid">
+              <div class="prompt-card">
+                <div class="prompt-card-header">
+                  <div class="prompt-card-icon indigo">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div class="prompt-card-info">
+                    <div class="prompt-card-title">CID Template</div>
+                    <div class="prompt-card-desc">Cognitive intention declaration</div>
+                  </div>
+                </div>
+                <div class="prompt-card-content">
+                  Template for clarifying problems, assumptions, and expectations before AI responds.
+                </div>
+                <button class="prompt-card-action">Use Template</button>
+              </div>
+              
+              <div class="prompt-card">
+                <div class="prompt-card-header">
+                  <div class="prompt-card-icon purple">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+                    </svg>
+                  </div>
+                  <div class="prompt-card-info">
+                    <div class="prompt-card-title">Critical Questions</div>
+                    <div class="prompt-card-desc">Deep evaluation bank</div>
+                  </div>
+                </div>
+                <div class="prompt-card-content">
+                  Collection of questions for deep evaluation of your own thinking.
+                </div>
+                <button class="prompt-card-action">View Questions</button>
+              </div>
+              
+              <div class="prompt-card">
+                <div class="prompt-card-header">
+                  <div class="prompt-card-icon blue">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" />
+                    </svg>
+                  </div>
+                  <div class="prompt-card-info">
+                    <div class="prompt-card-title">Thinking Rubric</div>
+                    <div class="prompt-card-desc">Reflection quality guide</div>
+                  </div>
+                </div>
+                <div class="prompt-card-content">
+                  Criteria for assessing reflection quality and depth of thinking.
+                </div>
+                <button class="prompt-card-action">Open Rubric</button>
+              </div>
+              
+              <div class="prompt-card">
+                <div class="prompt-card-header">
+                  <div class="prompt-card-icon green">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div class="prompt-card-info">
+                    <div class="prompt-card-title">Reflection Checklist</div>
+                    <div class="prompt-card-desc">Complete checklist</div>
+                  </div>
+                </div>
+                <div class="prompt-card-content">
+                  Checklist to ensure thorough reflection before making final decisions.
+                </div>
+                <button class="prompt-card-action">Access Checklist</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+
+      <!-- INPUT BAR -->
+      <div class="input-bar" id="inputBar">
+        <div class="input-actions">
+          <button class="input-action-btn" title="Attach Document">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739l-7.693 7.693a4.5 4.5 0 01-6.364-6.364l10.94-10.94A3 3 0 1119.5 7.372L8.552 18.32m.009-.01l-.01.01m5.699-9.941l-7.81 7.81a1.5 1.5 0 002.112 2.13" />
+            </svg>
+            <span>Attach</span>
+          </button>
+          <button class="input-action-btn" title="Search Web">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
+            </svg>
+            <span>Web</span>
+          </button>
+        </div>
+        <div class="input-wrapper">
+          <input type="text" id="chatInput" placeholder="Type your question..." autocomplete="off" />
+          <button class="send-btn" onclick="sendMessage()">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- CID MODAL -->
+    <div class="modal-overlay" id="cidModal">
+      <div class="modal">
+        <div class="modal-handle"></div>
+        <div class="modal-header">
+          <div class="modal-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+            </svg>
+          </div>
+          <div class="modal-header-content">
+            <div class="modal-title">Cognitive Intention Declaration</div>
+            <div class="modal-subtitle">Required before AI activates</div>
+          </div>
+          <span class="modal-required">Required</span>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">
+              <span class="form-label-number">1</span>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              What problem do I want to solve?
+            </label>
+            <textarea class="form-textarea" id="cidMasalah" rows="3" placeholder="Describe the problem you want to solve..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              <span class="form-label-number">2</span>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+              </svg>
+              What are my initial assumptions?
+            </label>
+            <textarea class="form-textarea" id="cidAsumsi" rows="3" placeholder="Write your current assumptions..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">
+              <span class="form-label-number">3</span>
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              What output do I expect?
+            </label>
+            <textarea class="form-textarea" id="cidEkspektasi" rows="3" placeholder="Describe your expected outcome..."></textarea>
+          </div>
+          
+          <div class="form-tip">
+            <div class="form-tip-header">
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+              </svg>
+              <span class="form-tip-title">Why is CID important?</span>
+            </div>
+            <div class="form-tip-text">
+              CID ensures you act as the primary cognitive agent before AI responds. This prevents answer outsourcing and maintains your intellectual sovereignty.
+            </div>
+          </div>
+          
+          <div class="modal-actions">
+            <button class="btn btn-secondary" onclick="closeCIDModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="submitCID()">Continue to AI</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let cidSubmitted = false;
+    let cidData = { masalah: '', asumsi: '', ekspektasi: '' };
+    let currentView = 'chat';
+    
+    function openSidebar() {
+      document.getElementById('sidebar').classList.add('open');
+      document.getElementById('sidebarOverlay').classList.add('show');
+    }
+    
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('show');
+    }
+    
+    function showView(viewName) {
+      document.querySelectorAll('.view-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+      
+      document.getElementById('view-' + viewName).classList.remove('hidden');
+      document.getElementById('nav-' + viewName).classList.add('active');
+      
+      document.getElementById('inputBar').style.display = viewName === 'chat' ? 'block' : 'none';
+      
+      currentView = viewName;
+      closeSidebar();
+    }
+    
+    function newChat() {
+      const chatContainer = document.getElementById('chatContainer');
+      chatContainer.innerHTML = `
+        <div class="empty-state" id="emptyState">
+          <div class="empty-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+            </svg>
+          </div>
+          <div class="empty-title">Start Reflective Conversation</div>
+          <div class="empty-desc">This platform positions you as the primary cognitive agent.</div>
+        </div>
+      `;
+      cidSubmitted = false;
+      cidData = { masalah: '', asumsi: '', ekspektasi: '' };
+      showView('chat');
+    }
+    
+    function sendMessage() {
+      const input = document.getElementById('chatInput');
+      const text = input.value.trim();
+      if (!text) return;
+      
+      if (!cidSubmitted) {
+        openCIDModal();
+        return;
+      }
+      
+      const emptyState = document.getElementById('emptyState');
+      if (emptyState) emptyState.remove();
+      
+      const chatContainer = document.getElementById('chatContainer');
+      chatContainer.innerHTML += `
+        <div class="message message-user">
+          <div class="bubble">${text}</div>
+        </div>
+      `;
+      
+      input.value = '';
+      
+      setTimeout(() => {
+        chatContainer.innerHTML += `
+          <div class="message message-ai">
+            <div class="bubble">
+              <div class="ai-header">
+                <div class="ai-avatar">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                  </svg>
+                </div>
+                <div>
+                  <div class="ai-name">CORE-AI</div>
+                  <div class="ai-label">Reflective Response Gate</div>
+                </div>
+              </div>
+              
+              <div class="ai-warning">
+                <svg class="ai-warning-icon" fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                </svg>
+                <div class="ai-warning-content">
+                  <div class="ai-warning-title">AI Bias & Epistemic Risk Alert</div>
+                  <div class="ai-warning-text">Epistemic awareness active</div>
+                </div>
+              </div>
+              
+              <div class="ai-section">
+                <div class="ai-section-title blue">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  3 Approaches to Consider
+                </div>
+                <ul class="ai-list">
+                  <li>Analytical approach: Break down the problem into smaller components</li>
+                  <li>Contextual approach: Consider the situation and background</li>
+                  <li>Comparative approach: Compare with similar cases</li>
+                </ul>
+              </div>
+              
+              <div class="ai-section">
+                <div class="ai-section-title purple">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+                  </svg>
+                  2 Assumptions to Test
+                </div>
+                <ul class="ai-list">
+                  <li>Assumption that all variables in the context have been identified</li>
+                  <li>Assumption that the solution must be universal</li>
+                </ul>
+              </div>
+              
+              <div class="ai-risk-box">
+                <div class="ai-risk-header">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                  <span class="ai-risk-title">1 Epistemic Risk</span>
+                </div>
+                <div class="ai-risk-text">
+                  This answer may oversimplify the complexity of your actual situation. Consider testing your assumptions before making a final decision.
+                </div>
+              </div>
+              
+              <div class="ai-tip">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 001.5-.189m-1.5.189a6.01 6.01 0 01-1.5-.189m3.75 7.478a12.06 12.06 0 01-4.5 0m3.75 2.383a14.406 14.406 0 01-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 10-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" />
+                </svg>
+                <div>Choose an approach that suits you and explain your reasoning to continue the reflection.</div>
+              </div>
+              
+              <div class="ai-actions">
+                <button class="ai-action-btn">Re-evaluate</button>
+                <button class="ai-action-btn primary">Continue Reflection</button>
+              </div>
+            </div>
+          </div>
+        `;
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }, 1000);
+      
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+    
+    function openCIDModal() {
+      document.getElementById('cidModal').classList.add('show');
+    }
+    
+    function closeCIDModal() {
+      document.getElementById('cidModal').classList.remove('show');
+    }
+    
+    function submitCID() {
+      const masalah = document.getElementById('cidMasalah').value.trim();
+      const asumsi = document.getElementById('cidAsumsi').value.trim();
+      const ekspektasi = document.getElementById('cidEkspektasi').value.trim();
+      
+      if (!masalah || !asumsi || !ekspektasi) {
+        alert('Please complete all CID fields to continue.');
+        return;
+      }
+      
+      cidData = { masalah, asumsi, ekspektasi };
+      cidSubmitted = true;
+      closeCIDModal();
+      
+      document.getElementById('cidMasalah').value = '';
+      document.getElementById('cidAsumsi').value = '';
+      document.getElementById('cidEkspektasi').value = '';
+      
+      sendMessage();
+    }
+    
+    document.getElementById('chatInput').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') sendMessage();
+    });
+    
+    showView('chat');
+  </script>
+</body>
+</html>
